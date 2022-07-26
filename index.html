@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="icon" href="./img/777.png">
+        <meta name="description" content="Casino Web page for online games">
+        <meta name="keywords" content="HTML, CSS, JavaScript, Casino, Games, Online, Gambling">
+        <meta name="author" content="Mariam Sebua">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="reset.css" rel="stylesheet">
+        <link href="styles.css" rel="stylesheet">
+        <title>Casino Games</title>
+    </head>
+    <body>
+        <header class="header">
+            <nav class="navigation">
+                <a href="#">Sports</a>
+                <a href="#" style="border-bottom: 2px var(--button) solid;">In-Play</a>
+                <a href="#">Casino</a>
+                <a href="#">Live Casino</a>
+                <a href="#">Virtual Space</a>
+            </nav>
+            <div class="header-buttons">
+                <button class="join" type="submit">Join</button>
+                <button class="login" type="submit">LogIn</button>
+            </div>
+        </header>
+        <div class="container">
+            <div class="ads">
+                <div class="ad-left">
+                    <a href="#"><img class="left-arrow" src="./img/arrow left.png" alt="arrow"></a>
+                    <img class="ad-img" src="./img/ad.png" alt="ad-photo">
+                </div>
+                <div class="ad-right">
+                    <img class="ad-img" src="./img/ad.png" alt="ad-photo">
+                    <a href="#"><img class="right-arrow" src="./img/right arrow.png" alt="arrow"></a>
+                </div>
+            </div>
+            <div class="filter">
+                <div class="search">
+                    <div class="all" style="height:100%; border-bottom: 2px solid var(--header-text);">
+                        <p>All Games</p>
+                        <p class="game-number">(3659)</p>
+                    </div>
+                    <div class="providers">
+                        <select>
+                            <option value="All Providers" selected>All Providers</option>
+                            <option value="All Providers">All Providers</option>
+                            <option value="All Providers">All Providers</option>
+                        </select>
+                    </div>
+                    <div class="lookfor">
+                        <input class="lookfor-input" type="text" placeholder="Search Games...">
+                        <img class="search-icon" src="./img/search icon -01.png" alt="search-icon">
+                    </div>
+                </div>
+                <div class="sorting">
+                    <div class="sort">
+                        <img src="./img/video slots.png" alt="video-slots-icon">
+                        <p class="video-slots">Video Slots</p>
+                    </div>
+                    <div class="sort">
+                        <img src="./img/popular slot.png" alt="popular-slot-icon">
+                        <p class="video-slots">Popular Slots</p>
+                    </div>
+                    <div class="sort">
+                        <img src="./img/FAV.png" alt="fav-icon">
+                        <p class="video-slots">FAV</p>
+                    </div>
+                    <div class="sort">
+                        <img src="./img/new games.png" alt="new-games-icon">
+                        <p class="video-slots">New Games</p>
+                    </div>
+                    <div class="sort">
+                        <img src="./img/table games.png" alt="table-games-icon">
+                        <p class="video-slots">Table Games</p>
+                    </div>
+                    <div class="sort">
+                        <img src="./img/777.png" alt="jackpot-games-icon">
+                        <p class="video-slots">Jackpot Games</p>
+                    </div>
+                    <div class="sort">
+                        <img src="./img/cards.png" alt="cards-icon">
+                        <p class="video-slots">Video Pocker</p>
+                    </div>
+                    <div class="sort">
+                        <img src="./img/plus icon.png" alt="plus-icon">
+                        <p class="video-slots">More</p>
+                    </div>
+                </div>
+            </div>
+            <div class="games">
+                <div class="games-list"></div>
+                <div class="loading"></div>
+            </div>
+            <button class="show-more" type="submit">SHOW MORE</button>
+        </div>
+        
+        <script src="script.js"></script>
+    </body>
+</html>
