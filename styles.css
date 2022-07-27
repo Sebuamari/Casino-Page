@@ -160,10 +160,14 @@ body > .container{
     height: 20px;
     border: 1px solid var(--text);
 }
-.lookfor > img{
+.lookfor > .search-icon{
     width: 20px;
     height: 20px;
     margin-left: -25px;
+}
+.lookfor > .search-icon:hover{
+    cursor: pointer;
+    transform: scale(1.2);
 }
 .filter > .sorting{
     height: 130px;

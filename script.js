@@ -49,22 +49,26 @@ function loadGames(){
       data = response.GameTemplates.sort(function(a,b) { return a.DefaultOrdering-b.DefaultOrdering });
       games.innerHTML += `<div class="new-games-container"></div>`;
         for(let i=0; i<60; i++){
-          let id = data[gamesNum].ID;
-          let uri = response.GameTemplateImages.filter(game => game.GameTemplateId===id);
+          let id = data[gamesNum].ID; // storing game ID
+          let url = response.GameTemplateImages.filter(game => game.GameTemplateId===id); // storing game template URL
           gameName = response.GameTemplateNameTranslations.filter(game => game.GameTemplateId===id);
-          if(gameName.length!==0){
-            document.querySelector(".new-games-container").innerHTML+=`
+          // switching to next game if no template URL or name is found for that game ID
+          if(gameName.length===0 || url.length===0){
+            gamesNum++;
+            id = data[gamesNum].ID;
+            gameName = response.GameTemplateNameTranslations.filter(game => game.GameTemplateId===id);
+            url = response.GameTemplateImages.filter(game => game.GameTemplateId===id);
+          }
+          // showing game template and name
+          document.querySelector(".new-games-container").innerHTML+=`
               <div class="box">
-                <img class="game" src="${IMGURL}${uri[0].CdnUrl}" alt="game banner"/>
+                <img class="game" src="${IMGURL}${url[0].CdnUrl}" alt="game banner"/>
                 <div class="game-name">
                     <p>${gameName[0].Value}</p>
                 </div>
               </div>
               `;
-            gamesNum++;
-          } else {
-            continue
-          }
+          gamesNum++;
       }
       document.querySelector(".new-games-container").className="games-container";
 })}
@@ -78,33 +82,38 @@ function filterGames(){
 	.then(response => response.json())
   .then(
     response => {
-      stopLoading();
-      clearGames();
-      data = response.GameTemplates.sort(function(a,b) { return a.DefaultOrdering-b.DefaultOrdering });
-      targetGames = response.GameTemplateNameTranslations.filter(game => game.Value.match(pattern));
-      // if no matches found
-      if(targetGames.length===0){
-        games.innerHTML += `<p class="error">Nothing Matches with - ${input}</p>`;
-      }
-      // if matches found
-       else {
-        games.innerHTML += `<div class="new-games-container"></div>`;
-        for(let i=0; i<targetGames.length; i++){
-          let id = response.GameTemplateNameTranslations[gamesNum].GameTemplateId;
-          let uri = response.GameTemplateImages.filter(game => game.GameTemplateId==targetGames[i].GameTemplateId);
-          if(uri.length!==0){
-            document.querySelector(".new-games-container").innerHTML+=`
-            <div class="box">
-              <img class="game" src="${IMGURL}${uri[0].CdnUrl}" alt="game banner"/>
-              <div class="game-name">
-                  <p>${targetGames[i].Value}</p>
-                  <p>name</p>
-              </div>
-            </div>
-            `;
-          }
+      if(input.length===0){
+        stopLoading();
+        clearGames();
+        games.innerHTML += `<p class="error">Please type something to look for</p>`;
+      } else {
+        stopLoading();
+        clearGames();
+        data = response.GameTemplates.sort(function(a,b) { return a.DefaultOrdering-b.DefaultOrdering });
+        targetGames = response.GameTemplateNameTranslations.filter(game => game.Value.match(pattern));
+        // if no matches found
+        if(targetGames.length===0){
+          games.innerHTML += `<p class="error">Nothing Matches with - ${input}</p>`;
         }
-        document.querySelector(".new-games-container").className="games-container";
+        // showing found matches
+        else {
+          games.innerHTML += `<div class="new-games-container"></div>`;
+          for(let i=0; i<targetGames.length; i++){
+            let url = response.GameTemplateImages.filter(game => game.GameTemplateId==targetGames[i].GameTemplateId);
+            if(url.length!==0){
+              document.querySelector(".new-games-container").innerHTML+=`
+              <div class="box">
+                <img class="game" src="${IMGURL}${url[0].CdnUrl}" alt="game banner"/>
+                <div class="game-name">
+                    <p>${targetGames[i].Value}</p>
+                    <p>name</p>
+                </div>
+              </div>
+              `;
+            }
+          }
+          document.querySelector(".new-games-container").className="games-container";
+        }
       }
     })
   // disappear show-more button for filtered games
