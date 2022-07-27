@@ -6,8 +6,9 @@ const filter = document.querySelector(".lookfor-input");
 const search = document.querySelector(".search-icon")
 const APIurl = 'https://mystake.com/api/game/getgametemplates/1/1/1';
 const IMGURL = "https://static.inpcdn.com/";
+let gameName;
 let data =[];
-let order = 0;
+let gamesNum = 0;
 
 
 // function that makes the loading animation show
@@ -22,9 +23,14 @@ function stopLoading() {
 
 // function that loads 60 more games
 function loadMoreGames() {
-  startLoading();
-  order+=60;
-  loadGames();
+  if(gamesNum>data.length){
+    showMore.style.display="none";
+    games.innerHTML += `<p class="error">No More Games to Load...</p>`;
+  } else {
+    startLoading();
+    gamesNum+=60;
+    loadGames();
+  }
 }
 
 // function that clears all the game shown
@@ -43,18 +49,22 @@ function loadGames(){
       data = response.GameTemplates.sort(function(a,b) { return a.DefaultOrdering-b.DefaultOrdering });
       games.innerHTML += `<div class="new-games-container"></div>`;
         for(let i=0; i<60; i++){
-          let id = response.GameTemplateNameTranslations[order].GameTemplateId;
+          let id = data[gamesNum].ID;
           let uri = response.GameTemplateImages.filter(game => game.GameTemplateId===id);
-          document.querySelector(".new-games-container").innerHTML+=`
-          <div class="box">
-            <img class="game" src="${IMGURL}${uri[0].CdnUrl}" alt="game banner"/>
-            <div class="game-name">
-                <p>${response.GameTemplateNameTranslations[order].Value}</p>
-                <p>name</p>
-            </div>
-          </div>
-          `;
-          order++;
+          gameName = response.GameTemplateNameTranslations.filter(game => game.GameTemplateId===id);
+          if(gameName.length!==0){
+            document.querySelector(".new-games-container").innerHTML+=`
+              <div class="box">
+                <img class="game" src="${IMGURL}${uri[0].CdnUrl}" alt="game banner"/>
+                <div class="game-name">
+                    <p>${gameName[0].Value}</p>
+                </div>
+              </div>
+              `;
+            gamesNum++;
+          } else {
+            continue
+          }
       }
       document.querySelector(".new-games-container").className="games-container";
 })}
@@ -72,38 +82,39 @@ function filterGames(){
       clearGames();
       data = response.GameTemplates.sort(function(a,b) { return a.DefaultOrdering-b.DefaultOrdering });
       targetGames = response.GameTemplateNameTranslations.filter(game => game.Value.match(pattern));
+      // if no matches found
       if(targetGames.length===0){
         games.innerHTML += `<p class="error">Nothing Matches with - ${input}</p>`;
-      } else {
+      }
+      // if matches found
+       else {
         games.innerHTML += `<div class="new-games-container"></div>`;
         for(let i=0; i<targetGames.length; i++){
-          let id = response.GameTemplateNameTranslations[order].GameTemplateId;
+          let id = response.GameTemplateNameTranslations[gamesNum].GameTemplateId;
           let uri = response.GameTemplateImages.filter(game => game.GameTemplateId==targetGames[i].GameTemplateId);
-          console.log(uri);
-          document.querySelector(".new-games-container").innerHTML+=`
-          <div class="box">
-            <img class="game" src="${IMGURL}${uri[0].CdnUrl}" alt="game banner"/>
-            <div class="game-name">
-                <p>${targetGames[i].Value}</p>
-                <p>name</p>
+          if(uri.length!==0){
+            document.querySelector(".new-games-container").innerHTML+=`
+            <div class="box">
+              <img class="game" src="${IMGURL}${uri[0].CdnUrl}" alt="game banner"/>
+              <div class="game-name">
+                  <p>${targetGames[i].Value}</p>
+                  <p>name</p>
+              </div>
             </div>
-          </div>
-          `;
-
-        console.log(i)
+            `;
+          }
         }
-      document.querySelector(".new-games-container").className="games-container";
+        document.querySelector(".new-games-container").className="games-container";
       }
     })
   // disappear show-more button for filtered games
   showMore.style.display="none";
 }
 
-// load 60 games at start
-loadGames();
-
 // event listeners for show-more button to load 60 more games, for input field
 // and for search button to filter the games
 showMore.addEventListener("click", loadMoreGames);
-filter.addEventListener("change",filterGames);
 search.addEventListener("click", filterGames);
+
+// load 60 games at start
+loadGames();

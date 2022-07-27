@@ -194,7 +194,7 @@ body > .container{
     border: 5px solid var(--button);
     border-top: 6px solid var(--background);
     border-radius: 100%;
-    margin: 0 auto;
+    margin: 30px auto;
     animation: spin 1s infinite linear;
 }
 .loading.display{
